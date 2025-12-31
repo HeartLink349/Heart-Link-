@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Christmas 2026 - My Queen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --dark-black: #1a0a1a;
+            --mid-gray: #2d0d2d;
+            --deep-pink: #ff1493;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --neon-pink: #ff69b4;
+        }
+
+        body {
+            background: linear-gradient(180deg, #000000 0%, #4d0026 50%, #ff1493 100%);
+            margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center;
+            font-family: 'Cairo', sans-serif; overflow: hidden; perspective: 2000px;
+            touch-action: manipulation;
+        }
+
+        .aurora {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% -20%, rgba(255, 20, 147, 0.2) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        #heart-canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 2; }
+
+        .lights { 
+            position: absolute; top: 0; width: 100%; display: flex; 
+            justify-content: space-around; z-index: 10; padding: 10px 0;
+        }
+        .light { 
+            width: 12px; height: 12px; border-radius: 50%; 
+            animation: blink 0.8s infinite alternate ease-in-out;
+        }
+        @keyframes blink { 
+            0% { opacity: 0.3; transform: scale(0.8); box-shadow: 0 0 10px currentColor; } 
+            100% { opacity: 1; transform: scale(1.3); box-shadow: 0 0 20px currentColor; } 
+        }
+
+        .container { 
+            position: relative; width: 92%; max-width: 420px; height: 620px;
+            z-index: 5; transform-style: preserve-3d; transition: transform 0.5s ease-out;
+        }
+
+        .card {
+            position: absolute; width: 100%; height: 100%; 
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 50px; padding: 30px 20px; text-align: center;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.8);
+            display: flex; flex-direction: column; align-items: center;
+            opacity: 0; pointer-events: none;
+            transform: translateZ(-800px) rotateX(10deg);
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-sizing: border-box;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            visibility: hidden;
+            color: white;
+        }
+
+        .card::after {
+            content: ''; position: absolute; inset: -1px; border-radius: 50px;
+            padding: 1px; background: linear-gradient(45deg, var(--neon-pink), transparent, var(--neon-pink));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .active-card { opacity: 1 !important; pointer-events: auto !important; transform: translateZ(0) rotateX(0deg) !important; visibility: visible;}
+        .exit-card { opacity: 0 !important; transform: translateZ(500px) translateY(-50px) !important; }
+
+        .pro-emoji { 
+            font-size: 3rem; color: var(--neon-pink); 
+            filter: drop-shadow(0 0 15px var(--neon-pink)); 
+            margin-bottom: 5px; animation: floatEmoji 4s infinite ease-in-out; 
+        }
+        @keyframes floatEmoji { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-10px); } 
+        }
+
+        .main-brand { font-family: 'Amiri', serif; font-size: 2.2rem; background: linear-gradient(to right, #fff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 10px 0; }
+        
+        .heart-to-heart {
+            color: #ffffff; font-size: 1.3rem; margin: 10px 0;
+            text-shadow: 0 0 10px var(--neon-pink);
+            font-weight: bold;
+            font-family: 'Amiri', serif;
+            line-height: 1.4;
+        }
+
+        input { 
+            width: 100%; height: 55px; border-radius: 25px; border: none; 
+            margin: 15px 0; text-align: center; font-size: 1.1rem; 
+            background: rgba(255,255,255,0.08); color: #fff; 
+            font-family: 'Cairo'; transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .unlock-btn { 
+            width: 100%; min-height: 55px; border-radius: 25px; border: none; 
+            background: linear-gradient(45deg, #2d0d2d, #ff1493); color: white; 
+            font-weight: bold; font-size: 1.2rem; cursor: pointer; transition: 0.4s; 
+            border: 1px solid var(--neon-pink); margin-top: 10px;
+        }
+        .unlock-btn:hover { background: var(--neon-pink); transform: scale(1.02); }
+
+        .message-box {
+            font-size: 1.0rem; line-height: 1.6; color: #eee; 
+            overflow-y: auto; max-height: 250px; padding: 15px; 
+            background: rgba(0,0,0,0.4); border-radius: 25px; 
+            text-align: center; border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .photo-gallery {
+            width: 100%; overflow-y: auto; padding-right: 5px;
+            display: flex; flex-direction: column; gap: 20px;
+        }
+        .photo-item {
+            background: rgba(255,255,255,0.03); border-radius: 20px;
+            padding: 15px; border: 1px solid rgba(255,20,147,0.2);
+        }
+        
+        .photo-item img {
+            width: 100%; border-radius: 15px; height: auto;
+            max-height: 300px; object-fit: contain; border: 1px solid #444;
+            background: #000;
+        }
+        .photo-caption {
+            margin-top: 12px; font-size: 1.1rem; color: #fff;
+            font-family: 'Amiri', serif; line-height: 1.5;
+            text-shadow: 0 0 5px rgba(255,20,147,0.6);
+        }
+
+        .square-video-container {
+            width: 100%; aspect-ratio: 1/1; 
+            background: #000; border-radius: 20px; overflow: hidden;
+            border: 2px solid var(--neon-pink); box-shadow: 0 0 15px var(--neon-pink);
+            margin-bottom: 15px;
+        }
+        .square-video-container video { width: 100%; height: 100%; object-fit: contain; }
+
+        .photo-gallery::-webkit-scrollbar { width: 4px; }
+        .photo-gallery::-webkit-scrollbar-thumb { background: var(--neon-pink); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="aurora"></div>
+    <audio id="bgMusic" src="https://files.catbox.moe/jqlz2t.mp3" preload="auto" loop></audio>
+    <canvas id="heart-canvas"></canvas>
+    <div class="lights" id="top-lights"></div>
+
+    <div class="container" id="mainContainer">
+        <div id="step1" class="card active-card">
+            <div style="background:#000; border: 1px solid #ff1493; padding: 5px 25px; border-radius:20px; font-weight:bold; margin-bottom:10px;">2026</div>
+            <span class="pro-emoji">🎁</span>
+            <h1 class="main-brand">𝑴𝒚 𝑸𝒖𝒆𝒆𝒏 👑</h1>
+            <p style="color: rgba(255,255,255,0.6);">عالمك السحري بانتظارك.. ✨</p>
+            <input type="text" id="passCode" placeholder="اكتبي الباسورد" onkeypress="handleEnter(event)">
+            <button class="unlock-btn" id="loginBtn" onclick="checkPassword()">دوسي بس ركزي 🌹</button>
+        </div>
+
+        <div id="step2" class="card">
+            <h3 class="heart-to-heart">𝑯𝒂𝒑𝒑𝒚 𝑵𝒐𝒘 𝒀𝒆𝒂𝒓 𝒀𝒂𝒂𝒂𝒂 𝑴𝒆𝒎𝒐𝒐𝒐𝒐😚♥️🌚</h3>
+            <div class="message-box">
+                <p>اخر دقيقه ف السنه لقيت نفسي عايز اكتبلك اي حاجه نختم بيها السنه🙂♥️<br>
+                وبجد بكتب الكلام دلوقتي من غير تفكير او ترتيب يمكن عشان الحاجات ال بتيجي من القلب مبتحتاجش ترتيب<br>
+                أنا بجد نفسي نفضل مع بعض العمر كله♥️<br>
+                ونكبر سوا ونحقق كل أحلامنا وإحنا ساندين بعض علشانبجد انتي كنتي السند والضهر والركن الهادي في حياتي 🥺♥️<br>
+                كل سنة وإنتي سر فرحتي🥺♥️<br>
+                كل سنة وإنتي الحب الحقيقي اللي ملوش نهاية بازن الله يارب 🤲♥️<br>
+                يا رب تكون 2026 سنة عوض وخير عليكي وتكوني فيها دايماً مبسوطة ومرتاحة، وتفضلي منورة دنيتي بجمالك وطيبة قلبك اللي مفيش زيها🥺♥️<br>
+                كل سنة وإحنا مع بعض يا حبيبتي ومفيش أي حاجة في الدنيا تقدر تفرقنا عن بعض أبدا بحبك أوووووي<br>
+                𝑯𝒂𝒑𝒑𝒚 𝑵𝒐𝒘 𝒀𝒆𝒂𝒓 𝒀𝒂𝒂𝒂𝒂 𝑴𝒆𝒎𝒐𝒐𝒐𝒐😚♥️🌚<br>
+                <br><strong>2026/1/1</strong></p>
+            </div>
+            <button class="unlock-btn" onclick="goToStep3()">دوسي هنا متبقيش غبيه ⬅️📸➡️</button>
+        </div>
+
+        <div id="step3" class="card">
+            <h2 class="main-brand" style="font-size: 1.8rem;">لحظاتنا الجميلة ✨</h2>
+            <div class="photo-gallery">
+                <div class="photo-item">
+                    <img src="https://files.catbox.moe/mw8vpn.jpg" alt="Memory 1">
+                    <div class="photo-caption">عقبال بدله فرحنا♥</div>
+                </div>
+                <div class="photo-item">
+                    <img src="https://files.catbox.moe/na83qh.jpg" alt="Memory 2">
+                    <div class="photo-caption">كان اجمل يوم لو فاكره يعني</div>
+                </div>
+                <div class="photo-item">
+                    <img src="https://files.catbox.moe/jyqnm7.jpg" alt="Memory 3">
+                    <div class="photo-caption">الصوره بتتكلم عن نفسها😂</div>
+                </div>
+                <div class="photo-item">
+                    <img src="https://files.catbox.moe/qc956m.jpg" alt="Memory 4">
+                    <div class="photo-caption">متقوليش عايزا العب طاوله ولا دومنا علشان مبتعرفيش</div>
+                </div>
+                <div class="photo-item">
+                    <img src="https://files.catbox.moe/kv8rd2.jpg" alt="Memory 5">
+                    <div class="photo-caption">اجمل صوره لحد دلوقتي بحبها</div>
+                </div>
+                <div class="photo-item">
+                    <img src="https://files.catbox.moe/fc5pcb.jpg" alt="Memory 6">
+                    <div class="photo-caption">كان احلي يوم بصراحه ومتقوليش عايزا العب بلايستيشن تاني</div>
+                </div>
+            </div>
+            <button class="unlock-btn" onclick="goToStep4()">صفحة الفيديو 🎥</button>
+        </div>
+
+        <div id="step4" class="card">
+            <div class="square-video-container">
+                <video id="finalVideo" loop playsinline>
+                    <source src="https://files.catbox.moe/tvd7rq.mp4" type="video/mp4">
+                </video>
+            </div>
+            <h2 class="main-brand">𝑴𝒚 𝑸𝒖𝒆𝒆𝒏 👑</h2>
+            <button class="unlock-btn" onclick="location.reload()" style="margin-top: 5px; min-height: 45px; font-size: 0.9rem;">إعادة من البداية 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        const bgMusic = document.getElementById('bgMusic');
+
+        function checkPassword() {
+            const pass = document.getElementById('passCode').value;
+            if(pass === "151254") {
+                document.getElementById('step1').classList.add('exit-card');
+                bgMusic.play().catch(e => console.log("Audio play deferred"));
+                
+                setTimeout(() => {
+                    document.getElementById('step1').classList.remove('active-card');
+                    document.getElementById('step2').classList.add('active-card');
+                    startCelebration();
+                }, 1000);
+            } else {
+                const btn = document.getElementById('loginBtn');
+                btn.classList.add('shake');
+                setTimeout(() => btn.classList.remove('shake'), 400);
+            }
+        }
+
+        function goToStep3() {
+            document.getElementById('step2').classList.add('exit-card');
+            setTimeout(() => {
+                document.getElementById('step2').classList.remove('active-card');
+                document.getElementById('step3').classList.add('active-card');
+            }, 1000);
+        }
+
+        function goToStep4() {
+            bgMusic.pause();
+            document.getElementById('step3').classList.add('exit-card');
+            setTimeout(() => {
+                document.getElementById('step3').classList.remove('active-card');
+                document.getElementById('step4').classList.add('active-card');
+                const vid = document.getElementById('finalVideo');
+                vid.play();
+            }, 1000);
+        }
+
+        function handleEnter(e) { if(e.key === "Enter") checkPassword(); }
+
+        const lightsContainer = document.getElementById('top-lights');
+        const lightColors = ['#ff1493', '#ffffff'];
+        for(let i=0; i<20; i++) {
+            const light = document.createElement('div');
+            light.className = 'light';
+            light.style.backgroundColor = lightColors[i % 2];
+            light.style.color = lightColors[i % 2];
+            light.style.animationDelay = (i * 0.1) + 's';
+            lightsContainer.appendChild(light);
+        }
+
+        const canvas = document.getElementById('heart-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, hearts = [];
+        function initHearts() {
+            width = window.innerWidth; height = window.innerHeight;
+            canvas.width = width; canvas.height = height;
+            hearts = [];
+            for(let i=0; i<60; i++) {
+                hearts.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 12 + 8,
+                    speed: Math.random() * 1 + 0.5,
+                    opacity: Math.random() * 0.4 + 0.2
+                });
+            }
+        }
+        function drawHearts() {
+            ctx.clearRect(0, 0, width, height);
+            hearts.forEach(h => {
+                ctx.fillStyle = `rgba(255, 20, 147, ${h.opacity})`;
+                ctx.font = `${h.size}px Arial`;
+                ctx.fillText('♥', h.x, h.y);
+                h.y += h.speed;
+                if(h.y > height) h.y = -20;
+            });
+            requestAnimationFrame(drawHearts);
+        }
+        function startCelebration() {
+            const emojis = ['💗','✨','🌸'];
+            for(let i=0; i<60; i++) {
+                setTimeout(() => {
+                    const h = document.createElement('div');
+                    h.innerHTML = emojis[Math.floor(Math.random()*emojis.length)];
+                    h.style.left = Math.random() * 100 + '%';
+                    h.style.position = 'fixed'; h.style.top = '-50px';
+                    h.style.zIndex = '9999'; h.style.fontSize = '25px';
+                    h.style.animation = `fall 3s linear forwards`;
+                    document.body.appendChild(h);
+                }, i * 100);
+            }
+        }
+
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+            .shake { animation: shake 0.4s ease-in-out; border-color: pink !important; }
+            @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+        `;
+        document.head.appendChild(style);
+        window.addEventListener('resize', initHearts);
+        initHearts();
+        drawHearts();
+    </script>
+</body>
+</html>
